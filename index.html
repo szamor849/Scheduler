@@ -3,191 +3,1309 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Webhook Receiver</title>
+    <title>MedSchedule Pro - Multilingual Healthcare</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f7fa;
-            color: #333;
+        :root {
+            --primary: #2c7da0;
+            --primary-dark: #1a4e68;
+            --secondary: #a5d2dd;
+            --accent: #ff6b6b;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --danger: #f44336;
         }
-        .header {
-            background: linear-gradient(135deg, #6e8efb, #a777e3);
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Header & Navigation */
+        header {
+            background: white;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 50px;
+            margin-right: 10px;
+        }
+        
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .logo-text span {
+            color: var(--accent);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav li {
+            margin: 0 15px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 16px;
+            transition: color 0.3s;
+            position: relative;
+        }
+        
+        nav a:hover {
+            color: var(--primary);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--primary);
+            transition: width 0.3s;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .language-selector {
+            display: flex;
+            align-items: center;
+        }
+        
+        .language-btn {
+            background: none;
+            border: 1px solid #ddd;
+            padding: 8px 15px;
+            margin: 0 5px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .language-btn:hover {
+            background: var(--primary);
             color: white;
-            padding: 20px;
-            border-radius: 8px;
+            border-color: var(--primary);
+        }
+        
+        .language-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            font-size: 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--primary);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(44, 125, 160, 0.8), rgba(26, 78, 104, 0.8)), url('https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 150px 5% 100px;
+            text-align: center;
+            margin-top: 80px;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
             margin-bottom: 20px;
+            animation: fadeInDown 1s;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            animation: fadeInUp 1s;
+        }
+        
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary:hover {
+            background: #ff5252;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Stats Section */
+        .stats {
+            background: white;
+            padding: 80px 5%;
             text-align: center;
         }
-        .webhook-info {
-            background-color: white;
+        
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .stat-item {
+            flex: 1;
+            min-width: 200px;
+            margin: 20px;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .stat-item:hover {
+            transform: translateY(-10px);
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 1.2rem;
+            color: #666;
+        }
+        
+        /* About Section */
+        .about {
+            background: var(--light);
+            padding: 100px 5%;
+        }
+        
+        .about-container {
+            display: flex;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+        
+        .about-text {
+            flex: 1;
+            min-width: 300px;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .about-text h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
             margin-bottom: 20px;
         }
-        .webhook-url {
-            background-color: #f1f3f6;
-            padding: 10px;
-            border-radius: 4px;
-            font-family: monospace;
-            word-break: break-all;
+        
+        .about-text p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: #555;
         }
-        .payloads {
-            background-color: white;
+        
+        .about-images {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .about-img {
+            width: 250px;
+            height: 250px;
+            border-radius: 10px;
+            margin: 10px;
+            object-fit: cover;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .about-img:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Appointment Form Section */
+        .appointment {
+            padding: 100px 5%;
+            background: white;
+        }
+        
+        .appointment-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .appointment-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .appointment-content {
+            padding: 30px;
+        }
+        
+        .two-column {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .column {
+            flex: 1;
+        }
+        
+        .section {
+            margin-bottom: 30px;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: #f9f9f9;
+            border-left: 4px solid var(--primary);
         }
-        .payload {
-            background-color: #f8f9fa;
-            border-left: 4px solid #6e8efb;
+        
+        h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        input, select, textarea {
+            padding: 12px 15px;
+            width: 100%;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(44, 125, 160, 0.2);
+        }
+        
+        button {
             padding: 15px;
-            margin: 10px 0;
-            border-radius: 4px;
+            background: var(--primary);
+            color: red;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 18px;
+            width: 100%;
+            margin-top: 10px;
+            font-weight: 600;
+            transition: background 0.3s;
         }
-        pre {
-            white-space: pre-wrap;
-            word-break: break-all;
+        
+        button:hover {
+            background: var(--primary-dark);
         }
-        .timestamp {
-            color: #666;
-            font-size: 0.9em;
+        
+        #result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            display: none;
+            font-size: 16px;
         }
-        .instructions {
-            background-color: #e8f4fd;
+        
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .webhook-info {
+            background: #e8f4f8;
             padding: 15px;
             border-radius: 8px;
-            margin: 20px 0;
-            border-left: 4px solid #2196f3;
-        }
-        h1, h2, h3 {
-            color: #2c3e50;
-        }
-        code {
-            background-color: #f1f3f6;
-            padding: 2px 5px;
-            border-radius: 3px;
+            margin-bottom: 20px;
             font-family: monospace;
+            font-size: 14px;
+            text-align: center;
         }
-        .status {
+        
+        .required {
+            color: #e22;
+        }
+        
+        .test-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .test-btn {
+            flex: 1;
+            padding: 10px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .test-btn:hover {
+            background: #5a6268;
+        }
+        
+        .response-info {
+            background: #2b2b2b;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--primary-dark);
+            color: white;
+            padding: 50px 5% 20px;
+        }
+        
+        .footer-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--accent);
+        }
+        
+        .footer-section p, .footer-section li {
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-section a:hover {
+            color: white;
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-icons a {
             display: inline-block;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-weight: bold;
-            margin-left: 10px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            transition: all 0.3s;
         }
-        .status.connected {
-            background-color: #e8f7ef;
-            color: #27ae60;
+        
+        .social-icons a:hover {
+            background: var(--accent);
+            transform: translateY(-5px);
         }
-        .status.disconnected {
-            background-color: #ffecf0;
-            color: #e74c3c;
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            margin-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .header-container {
+                padding: 15px 20px;
+            }
+            
+            nav ul {
+                display: none;
+                position: absolute;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            }
+            
+            nav ul.show {
+                display: flex;
+            }
+            
+            nav li {
+                margin: 10px 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .two-column {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero {
+                padding: 120px 5% 80px;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .stat-item {
+                min-width: 100%;
+            }
+            
+            .about-container {
+                flex-direction: column;
+            }
+            
+            .about-img {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .test-buttons {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .logo-text {
+                font-size: 20px;
+            }
+            
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .btn-primary {
+                padding: 10px 20px;
+                font-size: 16px;
+            }
+            
+            .stat-number {
+                font-size: 2.5rem;
+            }
+            
+            .footer-section {
+                min-width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Webhook Receiver</h1>
-        <p>Monitor incoming webhook requests in real-time</p>
-    </div>
-
-    <div class="webhook-info">
-        <h2>Your Webhook URL</h2>
-        <p class="webhook-url" id="webhookUrl">http://localhost:5678/appointment</p>
-        <p>Server Status: <span id="serverStatus" class="status disconnected">Not connected</span></p>
-        
-        <div class="instructions">
-            <h3>How to Use This Webhook</h3>
-            <ol>
-                <li>Ensure the server is running (see Step 3 below)</li>
-                <li>Use the URL above as your webhook endpoint</li>
-                <li>Send POST requests to this URL with JSON data</li>
-                <li>Incoming data will appear below automatically</li>
-            </ol>
+    <!-- Header & Navigation -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSIjMmM3ZGEwIiBkPSJNMjU2IDhDMTE5IDggOCAxMTkgOCAyNTZzMTExIDI0OCAyNDggMjQ4IDI0OC0xMTEgMjQ4LTI0OFMzOTMgOCAyNTYgOHptMCA0NDhjLTExMC41IDAtMjAwLTg5LjUtMjAwLTIwMFMxNDUuNSA1NiAyNTYgNTZzMjAwIDg5LjUgMjAwIDIwMC04OS41IDIwMC0yMDAgMjAweiIvPjxwYXRoIGZpbGw9IiNmZjZiNmIiIGQ9Ik0zMDQgMjQwbC0zMiAzMi0zMi0zMi0zMiAzMi0zMi0zMi0zMiAzMi0zMi0zMi0zMiAzMi0zMi0zMiA0OC00OCA0OCA0OCA0OC00OCA0OCA0OCA0OC00OHoiLz48cGF0aCBmaWxsPSIjMmM3ZGEwIiBkPSJNMzUyIDIwOEgyODh2LTY0aC0zMnY2NGgtNjR2MzJoNjR2NjRoMzJ2LTY0aDY0eiIvPjwvc3ZnPg==" alt="MedSchedule Pro Logo">
+                <div class="logo-text">Med<span>Schedule</span> Pro</div>
+            </div>
             
-            <h3>Testing with curl</h3>
-            <p>You can test your webhook using this curl command:</p>
-            <code>
-                curl -X POST -H "Content-Type: application/json" -d '{"test": "data"}' http://localhost:5678/webhook-test/appointment
-            </code>
+            <nav>
+                <ul id="navMenu">
+                    <li><a href="#home" data-translate="home">Home</a></li>
+                    <li><a href="#appointment" data-translate="appointment">Appointment</a></li>
+                    <li><a href="#about" data-translate="about">About Us</a></li>
+                    <li><a href="#contact" data-translate="contact">Contact</a></li>
+                </ul>
+            </nav>
+            
+            <div class="language-selector">
+                <button class="language-btn active" data-lang="en">EN</button>
+                <button class="language-btn" data-lang="fr">FR</button>
+                <button class="language-btn" data-lang="es">ES</button>
+                <button class="language-btn" data-lang="ht">HT</button>
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
-    </div>
+    </header>
 
-    <div class="payloads">
-        <h2>Received Payloads</h2>
-        <div id="payloadsContainer">
-            <p>No payloads received yet. Send a request to your webhook URL to see data here.</p>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <h1 data-translate="heroTitle">Your Health, Our Priority</h1>
+        <p data-translate="heroText">Book appointments with top doctors easily and quickly. Experience healthcare made simple with our advanced scheduling system.</p>
+        <a href="#appointment" class="btn-primary" data-translate="bookNow">Book Appointment Now</a>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-container">
+            <div class="stat-item">
+                <div class="stat-number" id="customerCount">0</div>
+                <div class="stat-label" data-translate="happyPatients">Happy Patients</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">50+</div>
+                <div class="stat-label" data-translate="expertDoctors">Expert Doctors</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">3</div>
+                <div class="stat-label" data-translate="hospitals">Hospitals</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">98%</div>
+                <div class="stat-label" data-translate="satisfactionRate">Satisfaction Rate</div>
+            </div>
         </div>
-    </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="about-container">
+            <div class="about-text">
+                <h2 data-translate="aboutTitle">About MedSchedule Pro</h2>
+                <p data-translate="aboutText1">We are a leading healthcare scheduling platform that connects patients with top medical professionals. Our mission is to make healthcare accessible and convenient for everyone.</p>
+                <p data-translate="aboutText2">With our advanced AI-powered system, you can book appointments, get reminders, and manage your healthcare needs all in one place.</p>
+                <p data-translate="aboutText3">Our team of dedicated professionals works tirelessly to ensure you receive the best care possible, when you need it most.</p>
+            </div>
+            <div class="about-images">
+                <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Smiling Patient" class="about-img">
+                <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Doctor" class="about-img">
+                <img src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Hospital" class="about-img">
+            </div>
+        </div>
+    </section>
+
+    <!-- Appointment Form Section -->
+    <section class="appointment" id="appointment">
+        <div class="appointment-container">
+            <div class="appointment-header">
+                <h2 data-translate="bookAppointment">Book Your Appointment</h2>
+                <p data-translate="fillForm">Fill out the form below to schedule your visit</p>
+            </div>
+            <div class="appointment-content">
+                <div class="two-column">
+                    <div class="column">
+                        <div class="section">
+                            <h2 data-translate="appointmentForm">Appointment Form</h2>
+                            <form id="appointmentForm">
+                                <div class="form-group">
+                                    <label for="fullName" data-translate="fullName">Full Name <span class="required">*</span></label>
+                                    <input type="text" id="fullName" name="fullName" value="Steve Zamor" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="email" data-translate="email">Email Address <span class="required">*</span></label>
+                                    <input type="email" id="email" name="email" value="stevyz1996@gmail.com" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="phone" data-translate="phone">Phone Number <span class="required">*</span></label>
+                                    <input type="tel" id="phone" name="phone" value="8096431331" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="doctor" data-translate="selectDoctor">Select Doctor <span class="required">*</span></label>
+                                    <select id="doctor" name="doctor" required>
+                                        <option value="cg-1">Dr. Sarah Johnson - Cardiology</option>
+                                        <option value="cg-2" selected>Dr. Michael Chen - Neurology</option>
+                                        <option value="cg-3">Dr. Emily Rodriguez - Pediatrics</option>
+                                        <option value="wm-1">Dr. James Wilson - Orthopedics</option>
+                                        <option value="wm-2">Dr. Lisa Taylor - Dermatology</option>
+                                        <option value="wm-3">Dr. Robert Brown - Ophthalmology</option>
+                                        <option value="nc-1">Dr. Amanda White - General Practice</option>
+                                        <option value="nc-2">Dr. David Lee - Dentistry</option>
+                                        <option value="nc-3">Dr. Maria Garcia - Psychiatry</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="date" data-translate="appointmentDate">Appointment Date <span class="required">*</span></label>
+                                    <input type="date" id="date" name="date" value="2025-09-13" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="time" data-translate="preferredTime">Preferred Time <span class="required">*</span></label>
+                                    <select id="time" name="time" required>
+                                        <option value="09:00">9:00 AM</option>
+                                        <option value="10:00">10:00 AM</option>
+                                        <option value="11:00" selected>11:00 AM</option>
+                                        <option value="13:00">1:00 PM</option>
+                                        <option value="14:00">2:00 PM</option>
+                                        <option value="15:00">3:00 PM</option>
+                                        <option value="16:00">4:00 PM</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="hospital" data-translate="hospital">Hospital <span class="required">*</span></label>
+                                    <select id="hospital" name="hospital" required>
+                                        <option value="City General Hospital" selected>City General Hospital</option>
+                                        <option value="Westside Medical Center">Westside Medical Center</option>
+                                        <option value="Northside Clinic">Northside Clinic</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="notes" data-translate="additionalNotes">Additional Notes (Optional)</label>
+                                    <textarea id="notes" name="notes" rows="3" placeholder="Any special requests or notes about your appointment..." data-translate="notesPlaceholder">Test appointment request</textarea>
+                                </div>
+                                
+                                <button type="submit" id="submitBtn" data-translate="bookAppointmentBtn">Book Appointment</button>
+                            </form>
+                            
+                            <div class="test-buttons">
+                                <button class="test-btn" onclick="testSuccess()" data-translate="testSuccess">Test Success Case</button>
+                                <button class="test-btn" onclick="testError()" data-translate="testError">Test Error Case</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="column">
+                        <div class="section">
+                            <h2 data-translate="appointmentDetails">Appointment Details</h2>
+                            <div id="result">
+                                <p data-translate="submitForm">Submit the form to see the appointment confirmation here.</p>
+                            </div>
+                            
+                            <div class="response-info">
+                                <strong data-translate="secureInfo">Your information is secure:</strong><br>
+                                <span data-translate="secureDetails">All data is encrypted and protected. We respect your privacy and comply with healthcare data protection regulations.</span>
+                            </div>
+
+                            <div class="webhook-info">
+                                <strong>Webhook Endpoint:</strong> http://localhost:5678/webhook-test/appointment
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>MedSchedule Pro</h3>
+                <p data-translate="footerMission">Making healthcare accessible and convenient through advanced scheduling technology.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3 data-translate="quickLinks">Quick Links</h3>
+                <ul>
+                    <li><a href="#home" data-translate="home">Home</a></li>
+                    <li><a href="#appointment" data-translate="bookAppointment">Book Appointment</a></li>
+                    <li><a href="#about" data-translate="about">About Us</a></li>
+                    <li><a href="#" data-translate="findDoctor">Find a Doctor</a></li>
+                    <li><a href="#" data-translate="services">Services</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3 data-translate="contactUs">Contact Us</h3>
+                <p><i class="fas fa-map-marker-alt"></i> <span data-translate="address">123 Healthcare Ave, Medical District</span></p>
+                <p><i class="fas fa-phone"></i> (809) 643-1331</p>
+                <p><i class="fas fa-envelope"></i> info@medschedulepro.com</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3 data-translate="openingHours">Opening Hours</h3>
+                <p data-translate="weekdays">Monday - Friday: 8:00 AM - 8:00 PM</p>
+                <p data-translate="saturday">Saturday: 9:00 AM - 5:00 PM</p>
+                <p data-translate="sunday">Sunday: Emergency services only</p>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>&copy; 2023 MedSchedule Pro. <span data-translate="allRights">All rights reserved.</span></p>
+        </div>
+    </footer>
 
     <script>
-        // Update the URL display
-        const webhookUrlElement = document.getElementById('webhookUrl');
-        const fullUrl = window.location.origin + '/webhook-test/eaa0e5d3-d5c4-4d92-9619-6374d4ae2571';
-        webhookUrlElement.textContent = fullUrl;
-        
-        // Check server status
-        async function checkServerStatus() {
+        // Translation dictionary
+        const translations = {
+            'en': {
+                'home': 'Home',
+                'appointment': 'Appointment',
+                'about': 'About Us',
+                'contact': 'Contact',
+                'heroTitle': 'Your Health, Our Priority',
+                'heroText': 'Book appointments with top doctors easily and quickly. Experience healthcare made simple with our advanced scheduling system.',
+                'bookNow': 'Book Appointment Now',
+                'happyPatients': 'Happy Patients',
+                'expertDoctors': 'Expert Doctors',
+                'hospitals': 'Hospitals',
+                'satisfactionRate': 'Satisfaction Rate',
+                'aboutTitle': 'About MedSchedule Pro',
+                'aboutText1': 'We are a leading healthcare scheduling platform that connects patients with top medical professionals. Our mission is to make healthcare accessible and convenient for everyone.',
+                'aboutText2': 'With our advanced AI-powered system, you can book appointments, get reminders, and manage your healthcare needs all in one place.',
+                'aboutText3': 'Our team of dedicated professionals works tirelessly to ensure you receive the best care possible, when you need it most.',
+                'bookAppointment': 'Book Your Appointment',
+                'fillForm': 'Fill out the form below to schedule your visit',
+                'appointmentForm': 'Appointment Form',
+                'fullName': 'Full Name',
+                'email': 'Email Address',
+                'phone': 'Phone Number',
+                'selectDoctor': 'Select Doctor',
+                'appointmentDate': 'Appointment Date',
+                'preferredTime': 'Preferred Time',
+                'hospital': 'Hospital',
+                'additionalNotes': 'Additional Notes (Optional)',
+                'notesPlaceholder': 'Any special requests or notes about your appointment...',
+                'bookAppointmentBtn': 'Book Appointment',
+                'testSuccess': 'Test Success Case',
+                'testError': 'Test Error Case',
+                'appointmentDetails': 'Appointment Details',
+                'submitForm': 'Submit the form to see the appointment confirmation here.',
+                'secureInfo': 'Your information is secure:',
+                'secureDetails': 'All data is encrypted and protected. We respect your privacy and comply with healthcare data protection regulations.',
+                'footerMission': 'Making healthcare accessible and convenient through advanced scheduling technology.',
+                'quickLinks': 'Quick Links',
+                'findDoctor': 'Find a Doctor',
+                'services': 'Services',
+                'contactUs': 'Contact Us',
+                'address': '123 Healthcare Ave, Medical District',
+                'openingHours': 'Opening Hours',
+                'weekdays': 'Monday - Friday: 8:00 AM - 8:00 PM',
+                'saturday': 'Saturday: 9:00 AM - 5:00 PM',
+                'sunday': 'Sunday: Emergency services only',
+                'allRights': 'All rights reserved.'
+            },
+            'fr': {
+                'home': 'Accueil',
+                'appointment': 'Rendez-vous',
+                'about': 'À propos',
+                'contact': 'Contact',
+                'heroTitle': 'Votre santé, notre priorité',
+                'heroText': 'Prenez rendez-vous facilement et rapidement avec les meilleurs médecins. Découvrez des soins de santé simplifiés grâce à notre système de planification avancé.',
+                'bookNow': 'Prendre rendez-vous',
+                'happyPatients': 'Patients satisfaits',
+                'expertDoctors': 'Médecins experts',
+                'hospitals': 'Hôpitaux',
+                'satisfactionRate': 'Taux de satisfaction',
+                'aboutTitle': 'À propos de MedSchedule Pro',
+                'aboutText1': 'Nous sommes une plateforme de planification de soins de santé de premier plan qui connecte les patients avec les meilleurs professionnels médicaux. Notre mission est de rendre les soins de santé accessibles et pratiques pour tous.',
+                'aboutText2': 'Avec notre système avancé alimenté par l\'IA, vous pouvez prendre des rendez-vous, recevoir des rappels et gérer vos besoins de santé en un seul endroit.',
+                'aboutText3': 'Notre équipe de professionnels dévoués travaille sans relâche pour vous offrir les meilleurs soins possibles, quand vous en avez le plus besoin.',
+                'bookAppointment': 'Prendre rendez-vous',
+                'fillForm': 'Remplissez le formulaire ci-dessous pour planifier votre visite',
+                'appointmentForm': 'Formulaire de rendez-vous',
+                'fullName': 'Nom complet',
+                'email': 'Adresse e-mail',
+                'phone': 'Numéro de téléphone',
+                'selectDoctor': 'Sélectionner un médecin',
+                'appointmentDate': 'Date du rendez-vous',
+                'preferredTime': 'Heure préférée',
+                'hospital': 'Hôpital',
+                'additionalNotes': 'Notes supplémentaires (optionnel)',
+                'notesPlaceholder': 'Des demandes spéciales ou des notes concernant votre rendez-vous...',
+                'bookAppointmentBtn': 'Prendre rendez-vous',
+                'testSuccess': 'Tester cas de succès',
+                'testError': 'Tester cas d\'erreur',
+                'appointmentDetails': 'Détails du rendez-vous',
+                'submitForm': 'Soumettez le formulaire pour voir la confirmation de rendez-vous ici.',
+                'secureInfo': 'Vos informations sont sécurisées :',
+                'secureDetails': 'Toutes les données sont cryptées et protégées. Nous respectons votre vie privée et nous conformons aux réglementations sur la protection des données de santé.',
+                'footerMission': 'Rendre les soins de santé accessibles et pratiques grâce à une technologie de planification avancée.',
+                'quickLinks': 'Liens rapides',
+                'findDoctor': 'Trouver un médecin',
+                'services': 'Services',
+                'contactUs': 'Contactez-nous',
+                'address': '123 Avenue de la Santé, District Médical',
+                'openingHours': 'Heures d\'ouverture',
+                'weekdays': 'Lundi - Vendredi: 8h00 - 20h00',
+                'saturday': 'Samedi: 9h00 - 17h00',
+                'sunday': 'Dimanche: Services d\'urgence uniquement',
+                'allRights': 'Tous droits réservés.'
+            },
+            'es': {
+                'home': 'Inicio',
+                'appointment': 'Cita',
+                'about': 'Acerca de',
+                'contact': 'Contacto',
+                'heroTitle': 'Su salud, nuestra prioridad',
+                'heroText': 'Programe citas con los mejores médicos de forma fácil y rápida. Experimente la atención médica simplificada con nuestro sistema de programación avanzado.',
+                'bookNow': 'Programar cita ahora',
+                'happyPatients': 'Pacientes satisfechos',
+                'expertDoctors': 'Médicos expertos',
+                'hospitals': 'Hospitales',
+                'satisfactionRate': 'Tasa de satisfacción',
+                'aboutTitle': 'Acerca de MedSchedule Pro',
+                'aboutText1': 'Somos una plataforma líder de programación de atención médica que conecta a los pacientes con los mejores profesionales médicos. Nuestra misión es hacer que la atención médica sea accesible y conveniente para todos.',
+                'aboutText2': 'Con nuestro sistema avanzado con tecnología de IA, puede programar citas, recibir recordatorios y administrar sus necesidades de atención médica en un solo lugar.',
+                'aboutText3': 'Nuestro equipo de profesionales dedicados trabaja incansablemente para garantizar que reciba la mejor atención posible, cuando más la necesita.',
+                'bookAppointment': 'Programar su cita',
+                'fillForm': 'Complete el formulario a continuación para programar su visita',
+                'appointmentForm': 'Formulario de cita',
+                'fullName': 'Nombre completo',
+                'email': 'Dirección de correo electrónico',
+                'phone': 'Número de teléfono',
+                'selectDoctor': 'Seleccionar médico',
+                'appointmentDate': 'Fecha de la cita',
+                'preferredTime': 'Hora preferida',
+                'hospital': 'Hospital',
+                'additionalNotes': 'Notas adicionales (opcional)',
+                'notesPlaceholder': 'Cualquier solicitud especial o notas sobre su cita...',
+                'bookAppointmentBtn': 'Programar cita',
+                'testSuccess': 'Probar caso exitoso',
+                'testError': 'Probar caso de error',
+                'appointmentDetails': 'Detalles de la cita',
+                'submitForm': 'Envíe el formulario para ver la confirmación de la cita aquí.',
+                'secureInfo': 'Su información está segura:',
+                'secureDetails': 'Todos los datos están encriptados y protegidos. Respetamos su privacidad y cumplimos con las regulaciones de protección de datos de atención médica.',
+                'footerMission': 'Haciendo que la atención médica sea accesible y conveniente mediante tecnología de programación avanzada.',
+                'quickLinks': 'Enlaces rápidos',
+                'findDoctor': 'Encontrar un médico',
+                'services': 'Servicios',
+                'contactUs': 'Contáctenos',
+                'address': '123 Avenida de la Salud, Distrito Médico',
+                'openingHours': 'Horario de atención',
+                'weekdays': 'Lunes - Viernes: 8:00 AM - 8:00 PM',
+                'saturday': 'Sábado: 9:00 AM - 5:00 PM',
+                'sunday': 'Domingo: Solo servicios de emergencia',
+                'allRights': 'Todos los derechos reservados.'
+            },
+            'ht': {
+                'home': 'Akèy',
+                'appointment': 'Randevou',
+                'about': 'Apre Nou',
+                'contact': 'Kontak',
+                'heroTitle': 'Sante w, Priyorite Nou',
+                'heroText': 'Pran randevou ak pi bon doktè yo fasilman ak rapidman. Eksperyans swen sante ki senplifye ak sistèm orè avanse nou an.',
+                'bookNow': 'Pran Randevou Kounye a',
+                'happyPatients': 'Pasyan Kontan',
+                'expertDoctors': 'Doktè Ekspè',
+                'hospitals': 'Lopital',
+                'satisfactionRate': 'Pousantaj Satisfaksyon',
+                'aboutTitle': 'Apre MedSchedule Pro',
+                'aboutText1': 'Nou se yon platfòm orè swen sante ki konekte pasyan ak pi bon pwofesyonèl medikal yo. Misyon nou se fè swen sante aksesib ak pratik pou tout moun.',
+                'aboutText2': 'Ak sistèm avanse nou ki gen ladann entèlijans atifisyèl, ou ka pran randevou, resevwa rapèl, ak jere bezwen swen sante ou nan yon sèl kote.',
+                'aboutText3': 'Ekip nou nan pwofesyonèl devwe travay san repo pou asire w resevwa pi bon swen posib, lè w bezwen li pi plis.',
+                'bookAppointment': 'Pran Randevou Ou',
+                'fillForm': 'Ranpli fòmil ki anba a pou pwograme vizit ou',
+                'appointmentForm': 'Fòmil Randevou',
+                'fullName': 'Non Konplè',
+                'email': 'Adrès Imèl',
+                'phone': 'Nimewo Telefòn',
+                'selectDoctor': 'Chwazi Doktè',
+                'appointmentDate': 'Dat Randevou',
+                'preferredTime': 'Lè Prefere',
+                'hospital': 'Lopital',
+                'additionalNotes': 'Nòt Adisyonèl (Opsyonèl)',
+                'notesPlaceholder': 'Nenpòt demann espesyal oswa nòt sou randevou ou a...',
+                'bookAppointmentBtn': 'Pran Randevou',
+                'testSuccess': 'Teste Ka Siksè',
+                'testError': 'Teste Ka Erè',
+                'appointmentDetails': 'Detay Randevou',
+                'submitForm': 'Soumèt fòmil la pou w wè konfimasyon randevou a isit la.',
+                'secureInfo': 'Enfòmasyon w an sekirite:',
+                'secureDetails': 'Tout done yo chifre ak pwoteje. Nou respekte vi prive w epi nou konfòme nou avèk règleman pwoteksyon done swen sante.',
+                'footerMission': 'Fè swen sante aksesib ak pratik atravè teknoloji orè avanse.',
+                'quickLinks': 'Lyen Rapid',
+                'findDoctor': 'Jwenn yon Doktè',
+                'services': 'Sèvis',
+                'contactUs': 'Kontakte Nou',
+                'address': '123 Healthcare Ave, Distri Medikal',
+                'openingHours': 'Lè Ouvèti',
+                'weekdays': 'Lendi - Vandredi: 8:00 AM - 8:00 PM',
+                'saturday': 'Samdi: 9:00 AM - 5:00 PM',
+                'sunday': 'Dimanch: Sèvis ijans sèlman',
+                'allRights': 'Tou dwa rezève.'
+            }
+        };
+
+        // Set the current language
+        let currentLang = 'en';
+
+        // Function to change language
+        function changeLanguage(lang) {
+            currentLang = lang;
+            
+            // Update all elements with data-translate attribute
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[lang][key]) {
+                    if (element.placeholder) {
+                        element.placeholder = translations[lang][key];
+                    } else {
+                        element.textContent = translations[lang][key];
+                    }
+                }
+            });
+            
+            // Update active language button
+            document.querySelectorAll('.language-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        // Mobile menu toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            document.getElementById('navMenu').classList.toggle('show');
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                
+                window.scrollTo({
+                    top: targetSection.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+                
+                // Close mobile menu if open
+                document.getElementById('navMenu').classList.remove('show');
+            });
+        });
+
+        // Language selector functionality
+        document.querySelectorAll('.language-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const lang = this.getAttribute('data-lang');
+                changeLanguage(lang);
+            });
+        });
+
+        // Animated counter for stats
+        function animateCounter(element, target, duration) {
+            let start = 0;
+            const increment = target / (duration / 16);
+            const updateCounter = () => {
+                start += increment;
+                if (start < target) {
+                    element.textContent = Math.floor(start);
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    element.textContent = target;
+                }
+            };
+            updateCounter();
+        }
+
+        // Start counter when stats section is in view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounter(document.getElementById('customerCount'), 12500, 2000);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        observer.observe(document.querySelector('.stats'));
+
+        // Your existing form submission code
+        document.getElementById('appointmentForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const originalBtnText = submitBtn.textContent;
+            submitBtn.textContent = currentLang === 'en' ? 'Booking...' : 
+                                   currentLang === 'fr' ? 'Réservation...' :
+                                   currentLang === 'es' ? 'Reservando...' : 'Ap Rezève...';
+            submitBtn.disabled = true;
+            
+            const formData = {
+                fullName: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                doctor: document.getElementById('doctor').value,
+                date: document.getElementById('date').value,
+                time: document.getElementById('time').value,
+                hospital: document.getElementById('hospital').value,
+                notes: document.getElementById('notes').value
+            };
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = currentLang === 'en' ? 'Sending appointment request...' :
+                                 currentLang === 'fr' ? 'Envoi de la demande de rendez-vous...' :
+                                 currentLang === 'es' ? 'Enviando solicitud de cita...' : 'Ap Voye Demann Randevou...';
+            resultDiv.className = '';
+            
             try {
-                const response = await fetch('http://localhost:5678/status');
+                const response = await fetch('http://localhost:5678/webhook-test/appointment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.text();
+                
                 if (response.ok) {
-                    document.getElementById('serverStatus').textContent = 'Connected';
-                    document.getElementById('serverStatus').className = 'status connected';
+                    resultDiv.className = 'success';
+                    resultDiv.innerHTML = currentLang === 'en' ? `
+                        <h3>✅ Appointment Request Received!</h3>
+                        <p>Your appointment request has been submitted successfully.</p>
+                        <p><strong>Status:</strong> ${response.status} ${response.statusText}</p>
+                        <p><strong>Details:</strong> You will receive a confirmation email shortly.</p>
+                        <p>Thank you for choosing MedSchedule Pro.</p>
+                    ` : currentLang === 'fr' ? `
+                        <h3>✅ Demande de rendez-vous reçue!</h3>
+                        <p>Votre demande de rendez-vous a été soumise avec succès.</p>
+                        <p><strong>Statut:</strong> ${response.status} ${response.statusText}</p>
+                        <p><strong>Détails:</strong> Vous recevrez un e-mail de confirmation sous peu.</p>
+                        <p>Merci d'avoir choisi MedSchedule Pro.</p>
+                    ` : currentLang === 'es' ? `
+                        <h3>✅ ¡Solicitud de cita recibida!</h3>
+                        <p>Su solicitud de cita ha sido enviada con éxito.</p>
+                        <p><strong>Estado:</strong> ${response.status} ${response.statusText}</p>
+                        <p><strong>Detalles:</strong> Recibirá un correo electrónico de confirmación shortly.</p>
+                        <p>Gracias por elegir MedSchedule Pro.</p>
+                    ` : `
+                        <h3>✅ Demann Randevou Resevwa!</h3>
+                        <p>Demann randevou ou a te soumèt avèk siksè.</p>
+                        <p><strong>Estati:</strong> ${response.status} ${response.statusText}</p>
+                        <p><strong>Detay:</strong> Ou pral resevwa yon imèl konfimasyon talè.</p>
+                        <p>Mèsi paske w chwazi MedSchedule Pro.</p>
+                    `;
+                } else {
+                    resultDiv.className = 'error';
+                    resultDiv.innerHTML = currentLang === 'en' ? `
+                        <h3>❌ Appointment Request Failed</h3>
+                        <p><strong>Status:</strong> ${response.status} ${response.statusText}</p>
+                        <p><strong>Response:</strong> ${result}</p>
+                        <p>Please try again or contact our support team.</p>
+                    ` : currentLang === 'fr' ? `
+                        <h3>❌ Échec de la demande de rendez-vous</h3>
+                        <p><strong>Statut:</strong> ${response.status} ${response.statusText}</p>
+                        <p><strong>Réponse:</strong> ${result}</p>
+                        <p>Veuillez réessayer ou contacter notre équipe de support.</p>
+                    ` : currentLang === 'es' ? `
+                        <h3>❌ Solicitud de cita fallida</h3>
+                        <p><strong>Estado:</strong> ${response.status} ${response.statusText}</p>
+                        <p><strong>Respuesta:</strong> ${result}</p>
+                        <p>Por favor, inténtelo de nuevo o contacte a nuestro equipo de soporte.</p>
+                    ` : `
+                        <h3>❌ Demann Randevou Echwe</h3>
+                        <p><strong>Estati:</strong> ${response.status} ${response.statusText}</p>
+                        <p><strong>Repons:</strong> ${result}</p>
+                        <p>Tanpri eseye ankò oswa kontakte ekip sipò nou an.</p>
+                    `;
                 }
             } catch (error) {
-                document.getElementById('serverStatus').textContent = 'Not connected';
-                document.getElementById('serverStatus').className = 'status disconnected';
+                resultDiv.className = 'error';
+                resultDiv.innerHTML = currentLang === 'en' ? `
+                    <h3>❌ Connection Error</h3>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p>Make sure your n8n instance is running at <code>http://localhost:5678</code></p>
+                    <p>Alternatively, the server may be temporarily unavailable.</p>
+                ` : currentLang === 'fr' ? `
+                    <h3>❌ Erreur de connexion</h3>
+                    <p><strong>Erreur:</strong> ${error.message}</p>
+                    <p>Assurez-vous que votre instance n8n est en cours d'exécution sur <code>http://localhost:5678</code></p>
+                    <p>Alternativement, le serveur peut être temporairement indisponible.</p>
+                ` : currentLang === 'es' ? `
+                    <h3>❌ Error de conexión</h3>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p>Asegúrese de que su instancia de n8n se esté ejecutando en <code>http://localhost:5678</code></p>
+                    <p>Alternativamente, el servidor puede estar temporalmente no disponible.</p>
+                ` : `
+                    <h3>❌ Erè Koneksyon</h3>
+                    <p><strong>Erè:</strong> ${error.message}</p>
+                    <p>Asire w ke enstans n8n ou an kouri sou <code>http://localhost:5678</code></p>
+                    <p>Oswa, sèvè a ka temporaryman indisponib.</p>
+                `;
+            } finally {
+                submitBtn.textContent = originalBtnText;
+                submitBtn.disabled = false;
             }
+        });
+
+        function testSuccess() {
+            // Fill form with success test data
+            document.getElementById('fullName').value = 'Steve Zamor';
+            document.getElementById('email').value = 'stevyz1996@gmail.com';
+            document.getElementById('phone').value = '8096431331';
+            document.getElementById('doctor').value = 'cg-2';
+            document.getElementById('date').value = '2025-09-13';
+            document.getElementById('time').value = '11:00';
+            document.getElementById('hospital').value = 'City General Hospital';
+            document.getElementById('notes').value = 'Test appointment request';
+            
+            // Submit the form
+            document.getElementById('appointmentForm').dispatchEvent(new Event('submit'));
         }
-        
-        // Check initially and every 5 seconds
-        checkServerStatus();
-        setInterval(checkServerStatus, 5000);
-        
-        // Set up EventSource to receive real-time updates
-        let eventSource;
-        
-        function connectEventSource() {
-            eventSource = new EventSource('http://localhost:5678/events');
+
+        function testError() {
+            // Fill form with error test data (missing required field)
+            document.getElementById('fullName').value = '';
+            document.getElementById('email').value = 'stevyz1996@gmail.com';
+            document.getElementById('phone').value = '8096431331';
+            document.getElementById('doctor').value = 'cg-2';
+            document.getElementById('date').value = '2025-09-13';
+            document.getElementById('time').value = '11:00';
+            document.getElementById('hospital').value = 'City General Hospital';
+            document.getElementById('notes').value = 'Test appointment request';
             
-            eventSource.onmessage = function(event) {
-                const payload = JSON.parse(event.data);
-                displayPayload(payload);
-            };
-            
-            eventSource.onerror = function() {
-                console.error('EventSource failed.');
-                eventSource.close();
-                setTimeout(connectEventSource, 3000);
-            };
-        }
-        
-        connectEventSource();
-        
-        function displayPayload(payload) {
-            const payloadsContainer = document.getElementById('payloadsContainer');
-            
-            // Remove the "no payloads" message if it exists
-            if (payloadsContainer.children.length === 1 && 
-                payloadsContainer.children[0].tagName === 'P') {
-                payloadsContainer.innerHTML = '';
-            }
-            
-            const payloadElement = document.createElement('div');
-            payloadElement.className = 'payload';
-            
-            const timestamp = new Date().toLocaleTimeString();
-            
-            payloadElement.innerHTML = `
-                <div class="timestamp">Received at: ${timestamp}</div>
-                <pre>${JSON.stringify(payload, null, 2)}</pre>
-            `;
-            
-            payloadsContainer.prepend(payloadElement);
+            // Submit the form
+            document.getElementById('appointmentForm').dispatchEvent(new Event('submit'));
         }
     </script>
 </body>
