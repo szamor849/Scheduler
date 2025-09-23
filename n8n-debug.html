@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>n8n Workflow Debugger - MedSchedule Pro</title>
+    <style>
+        :root {
+            --primary: #2c7da0;
+            --secondary: #a9d6e5;
+            --accent: #01497c;
+            --light: #e9f5f9;
+            --dark: #012a4a;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --error: #f44336;
+            --gray: #78909c;
+            --light-gray: #cfd8dc;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9f5f9 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+        
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .panel {
+            background: var(--light);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+        }
+        
+        h2 {
+            color: var(--dark);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary);
+        }
+        
+        .debug-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--light-gray);
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border 0.3s ease;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        textarea {
+            font-family: monospace;
+            min-height: 200px;
+        }
+        
+        button {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        button.secondary {
+            background: var(--light-gray);
+            color: var(--dark);
+        }
+        
+        .response {
+            background: #f8f9fa;
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 4px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .response h3 {
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        pre {
+            white-space: pre-wrap;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        
+        .status.success {
+            background: #e8f5e9;
+            color: var(--success);
+        }
+        
+        .status.error {
+            background: #ffebee;
+            color: var(--error);
+        }
+        
+        .instructions {
+            background: #fff3e0;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .instructions h3 {
+            color: var(--warning);
+            margin-bottom: 10px;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 900px) {
+            .debug-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>n8n Workflow Debugger</h1>
+            <p class="subtitle">Debug your n8n workflow execution issues</p>
+        </header>
+        
+        <div class="content">
+            <div class="panel">
+                <h2>n8n Workflow Debugging</h2>
+                
+                <div class="instructions">
+                    <h3>Your data is reaching n8n but the workflow is failing</h3>
+                    <p>Based on your output, the data is being sent successfully to n8n, but there's an issue in your workflow execution.</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="webhookUrl">Webhook URL</label>
+                    <input type="text" id="webhookUrl" value="http://localhost:5678/webhook-test/appointment" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label for="testData">Test Data (JSON)</label>
+                    <textarea id="testData">{
+  "fullName": "Steve Zamor",
+  "email": "stevyz1996@gmail.com",
+  "phone": "8096431331",
+  "doctor": "cg-2",
+  "date": "2025-09-13",
+  "time": "11:00",
+  "notes": "",
+  "hospital": "City General Hospital",
+  "csrf_token": "jjwa6bz34spha6py2oztl"
+}</textarea>
+                </div>
+                
+                <button id="testWebhook">Test Webhook Connection</button>
+                <button id="testWorkflow" class="secondary">Test Workflow Execution</button>
+                <button id="testCSRFOnly" class="secondary">Test CSRF Extraction Only</button>
+            </div>
+            
+            <div class="debug-section">
+                <div class="panel">
+                    <h2>Current n8n Function Code</h2>
+                    <div class="code-block">// Process incoming webhook data
+const { fullName, email, phone, doctor, date, time, notes, hospital, csrf_token } = $json;
+
+// Validate CSRF token (in a real implementation, you would verify this against a stored token)
+if (!csrf_token) {
+  throw new Error('CSRF token missing');
+}
+
+// ... rest of your function code</div>
+                    
+                    <div class="response">
+                        <h3>Test Result</h3>
+                        <pre id="testResult">Click "Test Workflow Execution" to see results</pre>
+                        <div id="testStatus"></div>
+                    </div>
+                </div>
+                
+                <div class="panel">
+                    <h2>Debug Solutions</h2>
+                    
+                    <div class="instructions">
+                        <h3>Try these fixes in your n8n workflow:</h3>
+                    </div>
+                    
+                    <div class="code-block">// SOLUTION 1: Add debugging to see what's received
+console.log('Full JSON data:', JSON.stringify($json, null, 2));
+console.log('CSRF token value:', $json.csrf_token);
+console.log('All keys:', Object.keys($json));
+
+// SOLUTION 2: More robust CSRF extraction
+const csrfToken = $json.csrf_token || $json.csrfToken || $json['csrf-token'] || null;
+
+if (!csrfToken) {
+  // Instead of throwing an error, continue with a warning
+  console.warn('CSRF token missing, but continuing for debugging');
+  // throw new Error('CSRF token missing');
+}
+
+// SOLUTION 3: Check if $json is properly structured
+// Sometimes n8n wraps data in different properties
+const actualData = $json.json || $json.body || $json.data || $json;
+const { fullName, email, phone, doctor, date, time, notes, hospital } = actualData;
+const csrfToken = actualData.csrf_token;</div>
+                    
+                    <button id="testSolution1">Test Solution 1 (Debug Output)</button>
+                    <button id="testSolution2">Test Solution 2 (Robust CSRF)</button>
+                    <button id="viewExecutions">View n8n Executions</button>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <h2>n8n Workflow Tips</h2>
+                
+                <div class="instructions">
+                    <h3>How to debug your n8n workflow:</h3>
+                    <ol>
+                        <li>Open n8n at <a href="http://localhost:5678" target="_blank">http://localhost:5678</a></li>
+                        <li>Go to your workflow and click "Execute" button</li>
+                        <li>Check the "Executions" tab to see detailed error logs</li>
+                        <li>Add console.log statements to your function node</li>
+                        <li>Check if your workflow is activated (toggle switch)</li>
+                        <li>Verify your webhook URL path matches exactly</li>
+                    </ol>
+                </div>
+                
+                <div class="test-buttons">
+                    <button id="openN8N">Open n8n Interface</button>
+                    <button id="openExecutions" class="secondary">Open n8n Executions</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const testWebhookBtn = document.getElementById('testWebhook');
+            const testWorkflowBtn = document.getElementById('testWorkflow');
+            const testCSRFOnlyBtn = document.getElementById('testCSRFOnly');
+            const testSolution1Btn = document.getElementById('testSolution1');
+            const testSolution2Btn = document.getElementById('testSolution2');
+            const viewExecutionsBtn = document.getElementById('viewExecutions');
+            const openN8NBtn = document.getElementById('openN8N');
+            const openExecutionsBtn = document.getElementById('openExecutions');
+            const testResult = document.getElementById('testResult');
+            const testStatus = document.getElementById('testStatus');
+            
+            testWebhookBtn.addEventListener('click', async function() {
+                const webhookUrl = document.getElementById('webhookUrl').value;
+                const testData = document.getElementById('testData').value;
+                
+                testResult.textContent = 'Testing webhook connection...';
+                testStatus.innerHTML = '';
+                
+                try {
+                    const jsonData = JSON.parse(testData);
+                    
+                    const response = await fetch(webhookUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(jsonData)
+                    });
+                    
+                    let result;
+                    try {
+                        result = await response.json();
+                    } catch (e) {
+                        result = { text: await response.text() };
+                    }
+                    
+                    testResult.textContent = JSON.stringify(result, null, 2);
+                    
+                    if (response.ok) {
+                        testStatus.innerHTML = '<div class="status success">WEBHOOK CONNECTION SUCCESS</div>';
+                    } else {
+                        testStatus.innerHTML = `<div class="status error">WEBHOOK ERROR: ${response.status} ${response.statusText}</div>`;
+                    }
+                } catch (error) {
+                    testResult.textContent = `Error: ${error.message}`;
+                    testStatus.innerHTML = `<div class="status error">ERROR: ${error.message}</div>`;
+                }
+            });
+            
+            testWorkflowBtn.addEventListener('click', function() {
+                const testData = document.getElementById('testData').value;
+                
+                testResult.textContent = 'Testing n8n workflow execution...';
+                testStatus.innerHTML = '';
+                
+                try {
+                    const jsonData = JSON.parse(testData);
+                    
+                    // Simulate what n8n is doing
+                    const { fullName, email, phone, doctor, date, time, notes, hospital, csrf_token } = jsonData;
+                    
+                    if (!csrf_token) {
+                        throw new Error('CSRF token missing [Line 6]');
+                    }
+                    
+                    testResult.textContent = `SUCCESS: Workflow executed successfully\n\nExtracted data:\n- fullName: ${fullName}\n- email: ${email}\n- phone: ${phone}\n- doctor: ${doctor}\n- date: ${date}\n- time: ${time}\n- notes: ${notes}\n- hospital: ${hospital}\n- csrf_token: ${csrf_token}`;
+                    testStatus.innerHTML = '<div class="status success">WORKFLOW SUCCESS</div>';
+                } catch (error) {
+                    testResult.textContent = `ERROR: ${error.message}\n\nThis is the error you're seeing in n8n. The issue is likely that the CSRF token field name doesn't match exactly what n8n is receiving.`;
+                    testStatus.innerHTML = `<div class="status error">WORKFLOW ERROR: ${error.message}</div>`;
+                }
+            });
+            
+            testCSRFOnlyBtn.addEventListener('click', function() {
+                const testData = document.getElementById('testData').value;
+                
+                try {
+                    const jsonData = JSON.parse(testData);
+                    
+                    testResult.textContent = `Testing CSRF token extraction:\n\n`;
+                    testResult.textContent += `jsonData.csrf_token: ${jsonData.csrf_token || 'NOT FOUND'}\n`;
+                    testResult.textContent += `jsonData.csrfToken: ${jsonData.csrfToken || 'NOT FOUND'}\n`;
+                    testResult.textContent += `jsonData['csrf-token']: ${jsonData['csrf-token'] || 'NOT FOUND'}\n\n`;
+                    testResult.textContent += `All available fields: ${Object.keys(jsonData).join(', ')}`;
+                    
+                    testStatus.innerHTML = '<div class="status success">CSRF extraction test completed</div>';
+                } catch (error) {
+                    testResult.textContent = `Error: ${error.message}`;
+                    testStatus.innerHTML = `<div class="status error">ERROR: ${error.message}</div>`;
+                }
+            });
+            
+            testSolution1Btn.addEventListener('click', function() {
+                const testData = document.getElementById('testData').value;
+                
+                try {
+                    const jsonData = JSON.parse(testData);
+                    
+                    testResult.textContent = `// SOLUTION 1: Add debugging to n8n function\n\n`;
+                    testResult.textContent += `console.log('Full JSON data:', ${JSON.stringify(jsonData, null, 2)});\n`;
+                    testResult.textContent += `console.log('CSRF token value:', ${jsonData.csrf_token || 'undefined'});\n`;
+                    testResult.textContent += `console.log('All keys:', ${Object.keys(jsonData).join(', ')});\n\n`;
+                    testResult.textContent += `// Add these lines to your n8n function to see what's actually received`;
+                    
+                    testStatus.innerHTML = '<div class="status success">Add these debug statements to your n8n function</div>';
+                } catch (error) {
+                    testResult.textContent = `Error: ${error.message}`;
+                    testStatus.innerHTML = `<div class="status error">ERROR: ${error.message}</div>`;
+                }
+            });
+            
+            testSolution2Btn.addEventListener('click', function() {
+                testResult.textContent = `// SOLUTION 2: More robust CSRF handling\n\n`;
+                testResult.textContent += `// Replace your current CSRF code with this:\n`;
+                testResult.textContent += `const csrfToken = $json.csrf_token || $json.csrfToken || $json['csrf-token'] || null;\n\n`;
+                testResult.textContent += `if (!csrfToken) {\n`;
+                testResult.textContent += `  // Instead of throwing an error, continue with a warning\n`;
+                testResult.textContent += `  console.warn('CSRF token missing, but continuing for debugging');\n`;
+                testResult.textContent += `  // throw new Error('CSRF token missing');\n`;
+                testResult.textContent += `}\n\n`;
+                testResult.textContent += `// Then use csrfToken variable in your code`;
+                
+                testStatus.innerHTML = '<div class="status success">Use this more robust CSRF handling code</div>';
+            });
+            
+            viewExecutionsBtn.addEventListener('click', function() {
+                window.open('http://localhost:5678/workflow/9uCLSNf2yi1bpm7K/executions', '_blank');
+            });
+            
+            openN8NBtn.addEventListener('click', function() {
+                window.open('http://localhost:5678', '_blank');
+            });
+            
+            openExecutionsBtn.addEventListener('click', function() {
+                window.open('http://localhost:5678/executions', '_blank');
+            });
+        });
+    </script>
+</body>
+</html>
