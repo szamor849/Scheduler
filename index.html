@@ -824,7 +824,7 @@
                             </div>
 
                             <div class="webhook-info">
-                                <strong>Webhook Endpoint:</strong>https://medschedule-server.onrender.com/webhook-test/appointment
+                                <strong>Webhook Endpoint:</strong>https://medschedule-server.onrender.com/appointment
                             </div>
                         </div>
                     </div>
@@ -1188,7 +1188,7 @@
             resultDiv.className = '';
             
             try {
-                const response = await fetch('/webhook-test/appointment', {
+                const response = await fetch('/appointment', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1311,3 +1311,4 @@
 </body>
 
 </html>
+
