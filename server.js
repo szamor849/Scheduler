@@ -3,6 +3,7 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Middleware
 app.use(express.json());
 app.use(express.static('.'));
 
@@ -24,13 +25,32 @@ app.post('/webhook-test/appointment', (req, res) => {
             });
         }
         
+        // Get doctor details
+        function getDoctorDetails(doctorId) {
+            const doctors = {
+                'cg-1': { name: 'Dr. Sarah Johnson', specialty: 'Cardiology' },
+                'cg-2': { name: 'Dr. Michael Chen', specialty: 'Neurology' },
+                'cg-3': { name: 'Dr. Emily Rodriguez', specialty: 'Pediatrics' },
+                'wm-1': { name: 'Dr. James Wilson', specialty: 'Orthopedics' },
+                'wm-2': { name: 'Dr. Lisa Taylor', specialty: 'Dermatology' },
+                'wm-3': { name: 'Dr. Robert Brown', specialty: 'Ophthalmology' },
+                'nc-1': { name: 'Dr. Amanda White', specialty: 'General Practice' },
+                'nc-2': { name: 'Dr. David Lee', specialty: 'Dentistry' },
+                'nc-3': { name: 'Dr. Maria Garcia', specialty: 'Psychiatry' }
+            };
+            return doctors[doctorId] || { name: 'Selected Doctor', specialty: 'Medical Specialist' };
+        }
+
+        const doctorDetails = getDoctorDetails(doctor);
+        
         // Create appointment object
         const appointment = {
             id: Date.now(),
             fullName,
             email,
             phone,
-            doctor,
+            doctor: doctorDetails.name,
+            doctorSpecialty: doctorDetails.specialty,
             date,
             time,
             hospital,
@@ -75,7 +95,16 @@ app.get('/health', (req, res) => {
     res.json({ 
         status: 'OK', 
         service: 'MedSchedule Pro Server',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        appointmentsCount: appointments.length
+    });
+});
+
+// Test endpoint - to verify server is working
+app.get('/test', (req, res) => {
+    res.json({ 
+        message: 'Server is working!',
+        endpoint: '/webhook-test/appointment is available for POST requests'
     });
 });
 
@@ -89,4 +118,5 @@ app.listen(PORT, () => {
     console.log(`📝 Webhook endpoint: http://localhost:${PORT}/webhook-test/appointment`);
     console.log(`👥 API endpoint: http://localhost:${PORT}/api/appointments`);
     console.log(`❤️ Health check: http://localhost:${PORT}/health`);
+    console.log(`🧪 Test endpoint: http://localhost:${PORT}/test`);
 });
