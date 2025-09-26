@@ -1188,7 +1188,7 @@
             resultDiv.className = '';
             
             try {
-                const response = await fetch('/appointment', {
+                const response = await fetch('webhook-test/appointment', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1311,4 +1311,5 @@
 </body>
 
 </html>
+
 
