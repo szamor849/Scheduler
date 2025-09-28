@@ -64,7 +64,7 @@ app.post('/appointment', (req, res) => {
 });
 
 // Keep your existing endpoint for testing
-app.post('/webhook-test/appointment', (req, res) => {
+app.post('/appointment', (req, res) => {
     console.log('Test webhook received:', req.body);
     res.status(201).json({ 
         success: true, 
