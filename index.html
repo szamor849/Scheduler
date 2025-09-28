@@ -1188,7 +1188,7 @@
             resultDiv.className = '';
             
             try {
-                const response = await fetch('/appointment', {
+                const response = await fetch('https://medschedule-n8n.onrender.com/webhook/appointmen', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1311,6 +1311,7 @@
 </body>
 
 </html>
+
 
 
 
